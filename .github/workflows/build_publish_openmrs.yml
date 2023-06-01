@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - TRELLO-123
     paths:
       - "bahmni-emr/**"
       - ".github/workflows/build_publish_openmrs.yml"
@@ -20,8 +21,6 @@ jobs:
       HELM_CHART_PATH: bahmni-emr/package/helm/openmrs
     steps:
       - uses: actions/checkout@v2
-      - name: Download hip module omod
-        run: sh .github/download_artifact.sh openmrs-module-hip Package ${{secrets.BAHMNI_PAT}} bahmni-emr
       - name: Setting Artifact version
         run: |
             APP_VERSION=$(cat bahmni-emr/.appversion)
@@ -42,52 +41,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: bahmni-emr/package/docker/Dockerfile
           push: true
-          tags: bahmniindiadistro/openmrs:${{env.ARTIFACT_VERSION}},bahmniindiadistro/openmrs:latest
-      - name: Docker Build and push for Performance
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: bahmni-emr/package/docker/profiling.Dockerfile
-          push: true
-          tags: bahmniindiadistro/openmrs:profiling
-      - name: Pull Bahmni Default Config Helm Chart
-        run: |
-          helm pull --repo https://bahmni.github.io/helm-charts openmrs --devel --untar --untardir bahmni-emr/package/helm/
-      - name: Helm - Update Version and Image Tag
-        run: |
-          yq --inplace '.image.repository = "bahmniindiadistro"' $HELM_CHART_PATH/values.yaml
-          yq --inplace '.description = "Helm chart for OpenMRS of Bahmni India distro "' $HELM_CHART_PATH/Chart.yaml
-          yq --inplace '.image.tag = "${{ env.ARTIFACT_VERSION }}"' $HELM_CHART_PATH/values.yaml
-          yq --inplace '.version = "${{ env.ARTIFACT_VERSION }}"' $HELM_CHART_PATH/Chart.yaml
-
-      - name: Helm Lint
-        run: helm lint $HELM_CHART_PATH
-
-      - name: Helm Package
-        run: helm package $HELM_CHART_PATH
-
-      - name: Helm - Checkout Charts Repository
-        uses: actions/checkout@v2
-        with:
-          repository: Bahmniindiadistro/helm-charts
-          ref: gh-pages
-          path: helm-charts
-          persist-credentials: false
-
-      - name: Helm - Copy chart
-        run: mkdir -p helm-charts/openmrs/ && cp openmrs-${{ env.ARTIFACT_VERSION }}.tgz helm-charts/openmrs/
-
-      - name: Helm - reIndex
-        working-directory: helm-charts/
-        run: helm repo index --merge index.yaml --url https://bahmniindiadistro.github.io/helm-charts/  .
-
-      - name: Helm - Publish Chart
-        working-directory: helm-charts/
-        run: |
-          git config user.name ${{ secrets.BAHMNI_USERNAME}}
-          git config user.email ${{ secrets.BAHMNI_EMAIL}}
-          git add .
-          git commit -m "Release of openmrs-${{ env.ARTIFACT_VERSION }}"
-          git push 'https://${{ secrets.BAHMNI_USERNAME}}:${{ secrets.BAHMNI_PAT}}@github.com/bahmniindiadistro/helm-charts.git' gh-pages
-
-
+          tags: bahmnihwc/openmrs:${{env.ARTIFACT_VERSION}},bahmnihwc/openmrs:latest
