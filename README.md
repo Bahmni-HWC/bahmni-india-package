@@ -29,18 +29,17 @@ The diagram will be generated in the root directory and if there is any existing
 
 1. Clone this repository into your local.
     >git clone https://github.com/Bahmni-HWC/bahmni-india-package.git
-2. Checkout to `avni-infra` branch.
-    > git checkout avni-infra
-3. Find the local IP address of your machine using `ifconfig` command. You will something like `inet 192.168.1.101 netmask 0xffffff00 broadcast 192.168.1.255` in the command output. Copy the inet IP address.
-4. Update the value in the .env file for the `HOSTNAME` variable.
-5. Now start Avni and keycloak by running the following command
+
+2. Find the local IP address of your machine using `ifconfig` command. You will something like `inet 192.168.1.101 netmask 0xffffff00 broadcast 192.168.1.255` in the command output. Copy the inet IP address.
+3. Update the value in the .env file for the `HOSTNAME` variable.
+4. Now start Avni and keycloak by running the following command
     > docker compose --profile keycloak --profile avni up -d
-6. Keycloak will be accessible at http://<<machine_ip>>:8083/keycloak. The default login credentials will be keycloakadmin/keycloak@dmin
-7. Wait for Avni to boot up. You can access Avni at http://localhost:8021 or http://<<machine_ip>>:8021 
+5. Keycloak will be accessible at http://<<machine_ip>>:8083/keycloak. The default login credentials will be keycloakadmin/keycloak@dmin
+6. Wait for Avni to boot up. You can access Avni at http://localhost:8021 or http://<<machine_ip>>:8021 
 
-8. Now you can login to Avni superadmin using Username: admin Password: Admin123
+7. Now you can login to Avni superadmin using Username: admin Password: Admin123
 
-9. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
+8. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
 
 ## Setting Up MinIO
 Note: The following steps are required only if you want to do some file uploads within Avni
@@ -78,7 +77,26 @@ Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which o
 3. For avni-server repo enter port as 8030 and for avni-intergration repo enter port as 8031 and save the config.
 4. Now you can set debug points in code and debug.
 
-### References:
+# Devlopment Setup 
+### Building Avni Integration Service
+1. Install Java 17
+2. Run `make build-server`. This will build the source code and produce a JAR.
+3. Once the build is successful you will see JAR file in integrator/build/libs/ folder of the repo.
+4. Now find the container id of the avni-integration service by runnning `docker ps` and copy the ID.
+5. Now from the integration-service directory, run the following command to copy that JAR into docker container.
+     `docker cp <container_id>:/opt/integrator/integrator.jar integrator/build/libs/integrator-0.0.2-SNAPSHOT.jar`
+6. Once copied restart container by running `docker compose restart avni-integration` from bahmni-india-package directory.
+
+### Building Avni Service
+1. Install Java 8
+2. Run `make build_server`. This will build the source code and produce a JAR.
+3. Once the build is successful you will see JAR file in avni-server-api/build/libs/ folder of the repo.
+4. Now find the container id of the avni service by runnning `docker ps` and copy the ID.
+5. Now from the integration-service directory, run the following command to copy that JAR into docker container.
+     `docker cp <container_id>:/opt/openchs/avni-server.jar avni-server-api/build/libs/avni-server-0.0.1-SNAPSHOT.jar`
+6. Once copied restart container by running `docker compose restart avni` from bahmni-india-package directory.
+
+# References:
 
 1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
 2. Avni Component Architecture: https://avni.readme.io/docs/component-architecture
