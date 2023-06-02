@@ -70,6 +70,14 @@ Once the application boots, the integration UI can be accessed at http://localho
 
 Note: At times when the session expires, the application will not properly redirect to login page. So manually change the URL to http://localhost:6013/avni-int-admin-app/index.html#/login and login again.
 
+# Setting up IntelliJ Idea debugger for Avni and Avni Integration Service
+Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which opens a Debug port by default to enable debugging from IDE. Avni Server debug port is exposed on 8030 and avni-integration debug port is exposed on 8031. 
+
+1. Clone the repository which you want to debug and open it in IntelliJ.
+2. Navigate to Run -->  Edit Configurations. In the pop up that opens Click on `+` and create a `Remote JVM Debug` Connection.
+3. For avni-server repo enter port as 8030 and for avni-intergration repo enter port as 8031 and save the config.
+4. Now you can set debug points in code and debug.
+
 ### References:
 
 1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
