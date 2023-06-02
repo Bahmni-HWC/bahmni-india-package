@@ -373,11 +373,13 @@ services:
       OPENCHS_MINIO_SECRET_ACCESS_KEY: ${AVNI_MINIO_SECRET_ACCESS_KEY}
       #LOGGING_LEVEL_ROOT: DEBUG
       NODE_SERVER_URL: "http://rules-server:3000"
+      DEBUG_OPTS: ${AVNI_DEBUG_OPTS}
     ports:
       - "8021:8021"
+      - "8030:8030"
 
   avni_db:
-    image: postgres
+    image: bahmnihwc/avni-db
     restart: always
     profiles: ["avni"]
     environment:
@@ -390,8 +392,6 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - 'avni-db-data:/var/lib/postgresql/data'
-      - './backup_data/init-avni-db.sh:/docker-entrypoint-initdb.d/init-avni-db.sh'
-      - './backup_data/create_org_config.sql:/etc/create_org_config.sql'
   
   rules-server:
     image: bahmnihwc/avni-rules-server
@@ -419,7 +419,7 @@ services:
       - "8083:8080"
 
   keycloak_db:
-    image: postgres
+    image: bahmnihwc/keycloak-db
     profiles: ["keycloak"]
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME}
@@ -427,7 +427,6 @@ services:
       POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     volumes:
       - 'keycloak-db-data:/var/lib/postgresql/data'
-      - './backup_data/keycloak_base_backup.sql.gz:/docker-entrypoint-initdb.d/keycloak_base_backup.sql.gz'
   
   minio:
     image: quay.io/minio/minio:RELEASE.2023-04-28T18-11-17Z
@@ -443,32 +442,36 @@ services:
       - "9090:9090"
 
   avni_integration:
-    image: mohantk/avni-integration
+    image: bahmnihwc/avni-integration-service
     profiles: ["avni-int"]
     environment:
-      AVNI_INT_DATASOURCE: jdbc:postgresql://avni_integration_db:5432/avni_int
-      AVNI_INT_DB_USER: avni_int
-      AVNI_INT_DB_PASSWORD: password
+      AVNI_INT_DATASOURCE: jdbc:postgresql://${AVNI_INTEGRATION_DB_HOST}:5432/${AVNI_INTEGRATION_DB_NAME}
+      AVNI_INT_DB_USER: ${AVNI_INTEGRATION_DB_USER}
+      AVNI_INT_DB_PASSWORD: ${AVNI_INTEGRATION_DB_PASSWORD}
       AVNI_INT_SERVER_PORT: 6013
-      BAHMNI_AVNI_API_URL: https://avni.gdobahmni.click:443
-      BAHMNI_AVNI_API_USER: admin@int
-      BAHMNI_AVNI_API_PASSWORD: Admin@123
-      OPENMRS_BASE_URL: http://openmrs:8080
-      OPENMRS_USER: superman
-      OPENMRS_PASSWORD: Admin123
-      BAHMNI_SCHEDULE_CRON: "*/30 * * * * *"
-      BAHMNI_SCHEDULE_CRON_FULL_ERROR: "*/30 * * * * *"
+      DEBUG_OPTS: ${AVNI_INTEGRATION_DEBUG_OPTS}
+      BAHMNI_AVNI_API_URL: http://${AVNI_HOST}:${AVNI_PORT}
+      BAHMNI_AVNI_API_USER: ${AVNI_INTEGRATION_USER}
+      BAHMNI_AVNI_API_PASSWORD: ${AVNI_INTEGRATION_PASSWORD}
+      OPENMRS_BASE_URL: http://${OPENMRS_HOST}:${OPENMRS_PORT}
+      OPENMRS_USER: ${OPENMRS_USERNAME}
+      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
+      BAHMNI_SCHEDULE_CRON: ${AVNI_INTEGRATION_CRON}
+      BAHMNI_SCHEDULE_CRON_FULL_ERROR: ${AVNI_INTEGRATION_CRON}
       BAHMNI_AVNI_IDP_TYPE: Keycloak
-      BAHMNI_INT_APP_TASKS: AvniSubject,AvniGeneralEncounter,BahmniPatient,BahmniEncounter,BahmniErrorRecords,AvniErrorRecords
+      BAHMNI_INT_APP_TASKS: AvniSubject
+    ports:
+      - "6013:6013"
+      - "8031:8031"
   
   avni_integration_db:
-    image: postgres
+    image: bahmnihwc/avni-integration-db
     restart: always
     profiles: ["avni-int"]
     environment:
-      POSTGRES_DB: avni_int
-      POSTGRES_USER: avni_int
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${AVNI_INTEGRATION_DB_NAME}
+      POSTGRES_USER: ${AVNI_INTEGRATION_DB_USER}
+      POSTGRES_PASSWORD: ${AVNI_INTEGRATION_DB_PASSWORD}
     volumes:
       - 'avni-int-db-data:/var/lib/postgresql/data'
 
