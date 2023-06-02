@@ -24,6 +24,9 @@ The diagram will be generated in the root directory and if there is any existing
 
 
 # Running Avni
+
+### It is recommended to update docker and docker compose to the latest version. Atleast update to a minimum of Docker Compose >2.10.x
+
 1. Clone this repository into your local.
     >git clone https://github.com/Bahmni-HWC/bahmni-india-package.git
 2. Checkout to `avni-infra` branch.
@@ -36,8 +39,9 @@ The diagram will be generated in the root directory and if there is any existing
 7. Wait for Avni to boot up. You can access Avni at http://localhost:8021 or http://<<machine_ip>>:8021 
 8. Once you see the login page of Avni, run the following command.
     > docker compose exec -it avni_db psql -U openchs -f /etc/create_org_config.sql
-9. Now you can login to Avni using Username: admin Password: Admin123
+9. Now you can login to Avni superadmin using Username: admin Password: Admin123
 
+10. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
 
 ## Setting Up MinIO
 Note: The following steps are required only if you want to do some file uploads within Avni
@@ -56,5 +60,16 @@ Note: The following steps are required only if you want to do some file uploads 
 6. After updating recretate Avni containers by running
     > docker compose --profile avni --profile minio up -d
 7. Now when an image is uploaded from a form, you should see that data in the bucket in MinIO console.
+
+
+# Setting up Avni Bahmni Integration Service:
+Avni integration services can be started by running the following command.
+    
+> docker compose --profile avni-integration up -d
+
+Once the application boots, the integration UI can be accessed at http://localhost:6013/avni-int-admin-app/index.html#/login. Credentials: integration@example.com/Admin123
+
+Note: At times when the session expires, the application will not properly redirect to login page. So manually change the URL to http://localhost:6013/avni-int-admin-app/index.html#/login and login again.
+### References:
 
     

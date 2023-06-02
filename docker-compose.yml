@@ -459,7 +459,7 @@ services:
       BAHMNI_SCHEDULE_CRON: ${AVNI_INTEGRATION_CRON}
       BAHMNI_SCHEDULE_CRON_FULL_ERROR: ${AVNI_INTEGRATION_CRON}
       BAHMNI_AVNI_IDP_TYPE: Keycloak
-      BAHMNI_INT_APP_TASKS: AvniSubject
+      BAHMNI_INT_APP_TASKS: AvniSubject,AvniGeneralEncounter,BahmniPatient,BahmniEncounter,AvniErrorRecords,BahmniErrorRecords
     ports:
       - "6013:6013"
       - "8031:8031"
