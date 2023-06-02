@@ -37,11 +37,10 @@ The diagram will be generated in the root directory and if there is any existing
     > docker compose --profile keycloak --profile avni up -d
 6. Keycloak will be accessible at http://<<machine_ip>>:8083/keycloak. The default login credentials will be keycloakadmin/keycloak@dmin
 7. Wait for Avni to boot up. You can access Avni at http://localhost:8021 or http://<<machine_ip>>:8021 
-8. Once you see the login page of Avni, run the following command.
-    > docker compose exec -it avni_db psql -U openchs -f /etc/create_org_config.sql
-9. Now you can login to Avni superadmin using Username: admin Password: Admin123
 
-10. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
+8. Now you can login to Avni superadmin using Username: admin Password: Admin123
+
+9. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
 
 ## Setting Up MinIO
 Note: The following steps are required only if you want to do some file uploads within Avni
@@ -70,6 +69,9 @@ Avni integration services can be started by running the following command.
 Once the application boots, the integration UI can be accessed at http://localhost:6013/avni-int-admin-app/index.html#/login. Credentials: integration@example.com/Admin123
 
 Note: At times when the session expires, the application will not properly redirect to login page. So manually change the URL to http://localhost:6013/avni-int-admin-app/index.html#/login and login again.
+
 ### References:
 
-    
+1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
+2. Avni Component Architecture: https://avni.readme.io/docs/component-architecture
+3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>    
