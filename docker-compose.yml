@@ -443,7 +443,7 @@ services:
 
   avni_integration:
     image: bahmnihwc/avni-integration-service
-    profiles: ["avni-int"]
+    profiles: ["avni-integration"]
     environment:
       AVNI_INT_DATASOURCE: jdbc:postgresql://${AVNI_INTEGRATION_DB_HOST}:5432/${AVNI_INTEGRATION_DB_NAME}
       AVNI_INT_DB_USER: ${AVNI_INTEGRATION_DB_USER}
@@ -467,7 +467,7 @@ services:
   avni_integration_db:
     image: bahmnihwc/avni-integration-db
     restart: always
-    profiles: ["avni-int"]
+    profiles: ["avni-integration"]
     environment:
       POSTGRES_DB: ${AVNI_INTEGRATION_DB_NAME}
       POSTGRES_USER: ${AVNI_INTEGRATION_DB_USER}
