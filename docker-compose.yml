@@ -75,7 +75,7 @@ services:
       - 'configuration_checksums:/configuration_checksums'
 
   bahmni-web:
-    image: bahmni/bahmni-web:${BAHMNI_WEB_IMAGE_TAG:?}
+    image: bahmnihwc/bahmni-web:${BAHMNI_WEB_IMAGE_TAG:?}
     profiles: ["emr"]
     volumes:
       #- "${BAHMNI_APPS_PATH:?}/ui/app/:/usr/local/apache2/htdocs/bahmni"
