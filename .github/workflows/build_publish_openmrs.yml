@@ -19,6 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'corretto'
+      - name: Build OpenMRS Distro
+        run: |
+          cd bahmni-emr/distro
+          ./mvnw clean package 
       - name: Setting Artifact version
         run: |
             APP_VERSION=$(cat bahmni-emr/.appversion)
