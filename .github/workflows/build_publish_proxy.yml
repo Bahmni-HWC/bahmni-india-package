@@ -35,5 +35,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: bahmni-proxy/package/docker/Dockerfile
           push: true
-          tags: bahmniindiadistro/proxy:${{env.ARTIFACT_VERSION}},bahmniindiadistro/proxy:latest
+          tags: bahmnihwc/proxy:${{env.ARTIFACT_VERSION}},bahmnihwc/proxy:latest
           
