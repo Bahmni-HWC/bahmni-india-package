@@ -1,0 +1,40 @@
+name: Deploy to Bahmni HWC Dev Environment
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Remote Instance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.BAHMNI_HWC_AWS_ID }}
+          aws-secret-access-key: ${{ secrets.BAHMNI_HWC_AWS_SECRET }}
+          aws-region: ap-south-1
+      - name: Create/Update Containers
+        run: |
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=GoK QA" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
+
+          if [ -z "$INSTANCE_ID" ]; then
+            echo "Instance not running"
+          else
+            aws ssm send-command \
+            --instance-ids "$INSTANCE_ID" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Update running containers" \
+            --parameters '{
+                "commands": [
+                  ". /root/.bashrc",
+                  "git pull -r",
+                  "docker compose pull",
+                  "docker compose up -d",
+                  "docker image prune -f"
+                ],
+                "workingDirectory": [
+                  "/home/ubuntu/bahmni-india-package"
+              ]
+            }' | jq '.Command | {CommandId: .CommandId, Parameters: .Parameters, Status: .Status}'
+          fi
