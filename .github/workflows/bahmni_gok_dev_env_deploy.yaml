@@ -1,10 +1,6 @@
-name: Deploy to ABDM Docker Env
+name: Deploy to Bahmni HWC Dev Environment
 on:
-  push:
-    branches:
-      - GOK-124
   workflow_dispatch:
-
 
 jobs:
   deploy:
@@ -21,7 +17,7 @@ jobs:
       - name: Create/Update Containers
         run: |
           INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=GoK QA" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
-          
+
           if [ -z "$INSTANCE_ID" ]; then
             echo "Instance not running"
           else
