@@ -111,4 +111,9 @@ Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which o
 
 1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
 2. Avni Component Architecture: https://avni.readme.io/docs/component-architecture
-3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>    
+3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>
+
+# Avni metadata BackUp/Restore
+
+1. From Avni dashboard go to Admin -> Bundle (Select location checkbox if you want to download meta data for locations as well) download the metadata zip file.
+2. To restore metadata go to Admin -> Upload and upload your zip file.  
