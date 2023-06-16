@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   proxy:
-    image: bahmniindiadistro/proxy:${PROXY_IMAGE_TAG:?}
+    image: bahmnihwc/proxy:${PROXY_IMAGE_TAG:?}
     volumes:
     - ${CERTIFICATE_PATH}:/etc/tls
     - "bahmni-patient-images:/home/bahmni/patient_images"
