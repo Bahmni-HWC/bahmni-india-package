@@ -1,9 +1,10 @@
 FROM bahmniindiadistro/openmrs:latest
 
-COPY bahmni-emr/resources/openhmis.backboneforms*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
-COPY bahmni-emr/resources/openhmis.commons*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
-COPY bahmni-emr/resources/openhmis.inventory*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
-COPY bahmni-emr/resources/jasperreport*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
+# Copy Inventory Modules downloaded by bahmni-emr/distro
+COPY bahmni-emr/distro/target/distro/openhmis.backboneforms*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
+COPY bahmni-emr/distro/target/distro/openhmis.commons*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
+COPY bahmni-emr/distro/target/distro/openhmis.inventory*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
+COPY bahmni-emr/distro/target/distro/jasperreport*.omod ${OPENMRS_APPLICATION_DATA_DIRECTORY}/modules/
 
 # Replace FHIR2 Extension Module
 #TODO: Remove this once product image is upgraded with latest FHIR2 Extension Module
