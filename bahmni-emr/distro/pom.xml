@@ -12,6 +12,11 @@
 
     <properties>
         <fhir2ExtensionModuleVersion>1.3.0-SNAPSHOT</fhir2ExtensionModuleVersion>
+        <openhmisInventoryCommonsModuleVersion>4.1.0-SNAPSHOT</openhmisInventoryCommonsModuleVersion>
+        <openhmisBackboneFormsModuleVersion>3.1.0-SNAPSHOT</openhmisBackboneFormsModuleVersion>
+        <jasperreportModuleVersion>2.1.0-SNAPSHOT</jasperreportModuleVersion>
+        <openhmisInventoryModuleVersion>3.1.0-SNAPSHOT</openhmisInventoryModuleVersion>
+        
     </properties>
 
     <dependencies>
@@ -20,6 +25,27 @@
             <artifactId>fhir2Extension-omod</artifactId>
             <version>${fhir2ExtensionModuleVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>openhmis.commons-omod</artifactId>
+            <version>${openhmisInventoryCommonsModuleVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>openhmis.backboneforms-omod</artifactId>
+            <version>${openhmisBackboneFormsModuleVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>jasperreport-omod</artifactId>
+            <version>${jasperreportModuleVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>openhmis.inventory-omod</artifactId>
+            <version>${openhmisInventoryModuleVersion}</version>
+        </dependency>
+        
     </dependencies>
 
     <pluginRepositories>
