@@ -368,6 +368,7 @@ services:
     profiles: ["avni"]
     environment:
       OPENCHS_MODE: "staging"
+      AWS_S3_ENABLE: "false"
       OPENCHS_DATABASE_USER: ${AVNI_DB_USERNAME}
       OPENCHS_DATABASE_PASSWORD: ${AVNI_DB_PASSWORD}
       OPENCHS_DATABASE_URL: "jdbc:postgresql://${AVNI_DB_HOST}:5432/${AVNI_DB_NAME}?currentSchema=public"
