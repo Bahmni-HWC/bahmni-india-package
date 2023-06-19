@@ -92,6 +92,17 @@ Once the application boots, the integration UI can be accessed at http://localho
 
 Note: At times when the session expires, the application will not properly redirect to login page. So manually change the URL to http://localhost:6013/avni-int-admin-app/index.html#/login and login again.
 
+# Backing up Avni Integration Database:
+When some new mapping is defined, or an existing mapping is modified in Avni Integration Service, then a database backup needs to be taken.
+1. Once you have tested the changes, stop the avni-integration service by running `docker compose stop avni_integration`.
+2. Exec into the avni\_integration_db service by running `docker compose exec -it avni_integration_db bash`
+3. Now connect to the db by running `psql -U avni_int`.
+4. Clear off the markers table by running `delete from markers` and exit the psql.
+5. Now take a db backup by running `pg_dump -U avni_int > /etc/avni_integration_backup_<date>.sql`
+6. Copy to backup_data/avni_integration by running `docker cp <avni_integration_container_id>:/etc/avni_integration_backup_<date>.sql .` from the bahmni-india-package/backup_data/avni_integration directory.
+7. Compress the file by running `gzip avni_integration_backup_<date>.sql`
+8. Commit and push the changes. 
+
 # Setting up IntelliJ Idea debugger for Avni and Avni Integration Service
 Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which opens a Debug port by default to enable debugging from IDE. Avni Server debug port is exposed on 8030 and avni-integration debug port is exposed on 8031. 
 
