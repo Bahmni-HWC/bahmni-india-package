@@ -74,7 +74,6 @@ services:
     volumes:
       - 'openmrsdbdata:/var/lib/mysql'
       - 'configuration_checksums:/configuration_checksums'
-
   bahmni-web:
     image: bahmni/bahmni-web:${BAHMNI_WEB_IMAGE_TAG:?}
     profiles: ["emr"]
@@ -464,8 +463,8 @@ services:
       BAHMNI_AVNI_API_USER: ${AVNI_INTEGRATION_USER}
       BAHMNI_AVNI_API_PASSWORD: ${AVNI_INTEGRATION_PASSWORD}
       OPENMRS_BASE_URL: http://${OPENMRS_HOST}:${OPENMRS_PORT}
-      OPENMRS_USER: ${OPENMRS_USERNAME}
-      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
+      OPENMRS_USER: ${AVNI_INTEGRATION_OPENMRS_USERNAME}
+      OPENMRS_PASSWORD: ${AVNI_INTEGRATION_OPENMRS_PASSWORD}
       BAHMNI_SCHEDULE_CRON: ${AVNI_INTEGRATION_CRON}
       BAHMNI_SCHEDULE_CRON_FULL_ERROR: ${AVNI_INTEGRATION_CRON}
       BAHMNI_AVNI_IDP_TYPE: Keycloak
