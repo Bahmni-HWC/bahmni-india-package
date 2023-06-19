@@ -42,12 +42,14 @@ The diagram will be generated in the root directory and if there is any existing
 8. Also from the database backup, a default organisation named `Bahmni` will also be created with some metadata. The login credentials for the same is admin@bahmni/Admin123. This can also be used to login from mobile app.
 
 ## Troubleshooting
-1. If you are connecting to a DHCP server or switch networks, then the local IP address may change. In such case, restart  keycloak and avni service
+1. If you are connecting to a DHCP server or switch networks, then the local IP address may change. In such case update HOSTNAME variable in .env with local IP, restart  keycloak and avni service
    * `docker compose restart keycloak`
-   * `docker compose restart avni` 
+   * `docker compose restart avni`
+
+    Also remember to update the IP in /etc/hosts as well for minio.avni.local .  
 
 ## Setting Up MinIO
-Note: The following steps are required only if you want to do some file uploads within Avni
+Note: The following steps are required only if you want to do some file uploads/metdata uploads within Avni
 1. Start MinIo by running the following command
     > docker compose --profile minio up -d
 2. Add an entry in `/etc/hosts` file. Before this find the machine IP as mentioned in step 3 above.
@@ -64,7 +66,23 @@ Note: The following steps are required only if you want to do some file uploads 
     > docker compose --profile avni --profile minio up -d
 7. Now when an image is uploaded from a form, you should see that data in the bucket in MinIO console.
 
+# Avni metadata Backup/Restore
 
+Note: Before performing any of the steps mentioned below please setup MinIO by following the steps [here](#setting-up-minio).
+## Taking Backup from existing instance
+1. Login to Avni as admin@bahmni user
+2. Navigate to App Designer --> Bundle. Select the `Include Locations` checkbox and then click on Download.
+3. You will get a zip downloaded with the name `Karnataka.zip`.
+4. Copy that zip file to Bahmni-HWC/clinic-config/avni-metadata
+5. Unzip the zip file by running `unzip Karnataka.zip && rm -f Karnataka.zip` from clinic-config/avni-metadata directory
+6. Commit the changes if any to clinic-config repo
+
+## Restoring Metadata
+1. Clone the Bahmni-HWC/clinic-config repository
+2. Zip the avni-metadata directory by running ` zip -r Karnataka.zip .` from clinic-config/avni-metadata directory.
+3. Now login to your avni instance as admin@bahmni and then navigate to Admin --> Upload
+4. Under the Upload section, select type as Metadata Zip and click on Choose file and select the Karnataka.zip file created in the above step.
+5. Once choosen click on Upload button. Now the metadata will be updated.
 # Setting up Avni Bahmni Integration Service:
 Avni integration services can be started by running the following command.
     
@@ -73,6 +91,17 @@ Avni integration services can be started by running the following command.
 Once the application boots, the integration UI can be accessed at http://localhost:6013/avni-int-admin-app/index.html#/login. Credentials: integration@example.com/Admin123
 
 Note: At times when the session expires, the application will not properly redirect to login page. So manually change the URL to http://localhost:6013/avni-int-admin-app/index.html#/login and login again.
+
+# Backing up Avni Integration Database:
+When some new mapping is defined, or an existing mapping is modified in Avni Integration Service, then a database backup needs to be taken.
+1. Once you have tested the changes, stop the avni-integration service by running `docker compose stop avni_integration`.
+2. Exec into the avni\_integration_db service by running `docker compose exec -it avni_integration_db bash`
+3. Now connect to the db by running `psql -U avni_int`.
+4. Clear off the markers table by running `delete from markers` and exit the psql.
+5. Now take a db backup by running `pg_dump -U avni_int > /etc/avni_integration_backup_<date>.sql`
+6. Copy to backup_data/avni_integration by running `docker cp <avni_integration_container_id>:/etc/avni_integration_backup_<date>.sql .` from the bahmni-india-package/backup_data/avni_integration directory.
+7. Compress the file by running `gzip avni_integration_backup_<date>.sql`
+8. Commit and push the changes. 
 
 # Setting up IntelliJ Idea debugger for Avni and Avni Integration Service
 Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which opens a Debug port by default to enable debugging from IDE. Avni Server debug port is exposed on 8030 and avni-integration debug port is exposed on 8031. 
@@ -111,4 +140,4 @@ Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which o
 
 1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
 2. Avni Component Architecture: https://avni.readme.io/docs/component-architecture
-3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>    
+3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>
