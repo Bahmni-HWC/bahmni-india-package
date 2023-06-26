@@ -5,6 +5,8 @@ services:
     volumes:
     - ${CERTIFICATE_PATH}:/etc/tls
     - "bahmni-patient-images:/home/bahmni/patient_images"
+    environment:
+      TZ: ${TZ}
 
     ports:
       - "80:80"
@@ -13,6 +15,8 @@ services:
     image: '${CONFIG_IMAGE_NAME:?}:${CONFIG_IMAGE_TAG:?}'
     volumes:
       - '${CONFIG_VOLUME:?}:/usr/local/bahmni_config'
+    environment:
+      TZ: ${TZ}
 
   openmrs:
     profiles: ['emr']
@@ -48,6 +52,7 @@ services:
       PHONE_NUMBER: ${PHONE_NUMBER:?}
       OMRS_DOCKER_ENV: ${OPENMRS_DOCKER_ENV}
       OMRS_C3P0_MAX_SIZE: ${OMRS_C3P0_MAX_SIZE}
+      TZ: ${TZ}
     # ports:
       # - ${OMRS_DEV_DEBUG_PORT}:${OMRS_DEV_DEBUG_PORT}
     volumes:
@@ -71,6 +76,7 @@ services:
       MYSQL_DATABASE: ${OPENMRS_DB_NAME:?}
       MYSQL_USER: ${OPENMRS_DB_USERNAME:?}
       MYSQL_PASSWORD: ${OPENMRS_DB_PASSWORD:?}
+      TZ: ${TZ}
     ports:
       - '3306:3306'
     volumes:
@@ -99,6 +105,7 @@ services:
     environment:
       - POSTGRES_USER=${HIP_DB_USER:?}
       - POSTGRES_PASSWORD=${HIP_DB_PASSWORD:?}
+      - TZ=${TZ}
     ports:
       - "5433:5432"
     volumes:
@@ -110,6 +117,8 @@ services:
       container_name: rabbitmq
       ports:
         - "5672:5672"
+      environment:
+        TZ: ${TZ}
   otp:
       image: bahmniindiadistro/otp-service:${OTP_SERVICE_IMAGE_TAG:?}
       profiles: ["abdm", "sms"]
@@ -119,6 +128,7 @@ services:
       environment:
         whitelisted:numbers: ${OTP_WHITELIST_NUMBERS}
         ConnectionStrings:DefaultConnection: Host=${OTP_DB_HOST:?};Port=${OTP_DB_PORT:?};Username=${OTP_DB_USER:?};Password=${OTP_DB_PASSWORD:?};Database=${OTP_DB_NAME:?};
+        TZ: ${TZ}
 
   hiu-db-setup:
       image: bahmniindiadistro/hiu-db:${HIU_DB_INITIALIZER_IMAGE_TAG:?}
@@ -126,6 +136,7 @@ services:
       container_name: hiu-db-setup
       environment:
         - 'JAVA_TOOL_OPTIONS=-Djdbc.url=${HIU_DB_URL:?} -Djdbc.username=${HIU_DB_USER:?} -Djdbc.password=${HIU_DB_PASSWORD:?} -Djdbc.database=${HIU_DB_NAME:?}'
+        - TZ=${TZ}
 
   hip:
     container_name: hip
@@ -154,6 +165,7 @@ services:
       rabbit:UserName: ${RABBITMQ_USERNAME:?}
       rabbit:Password: ${RABBITMQ_PASSWORD:?}
       ConnectionStrings:DefaultConnection: Host=${HIP_DB_HOST:?};Port=${HIP_DB_PORT:?};Username=${HIP_DB_USER:?};Password=${HIP_DB_PASSWORD:?};Database=${HIP_DB_NAME:?};
+      TZ: ${TZ}
 
   hiu:
     image: bahmniindiadistro/hiu:${HIU_IMAGE_TAG:?}
@@ -192,6 +204,7 @@ services:
       DATA_FLOW_CONSENT_REQUEST_WAIT_TIME: ${HIU_DATA_FLOW_CONSENT_REQUEST_WAIT_TIME:?}
       DATA_FLOW_CONSENT_ARTEFACT_WAIT_TIME: ${HIU_DATA_FLOW_CONSENT_ARTEFACT_WAIT_TIME:?}
       DATA_FLOW_PART_WAIT_TIME: ${HIU_DATA_FLOW_PART_WAIT_TIME:?}
+      TZ: ${TZ}
     ports:
       - "9053:8003"
 
@@ -204,6 +217,7 @@ services:
       BASE_NAME: ${HIU_UI_BASE_NAME:?}
       TIMEZONE_OFFSET: ${TIMEZONE_OFFSET:?}
       TITLE: "HIU"
+      TZ: ${TZ}
     ports:
       - "5000:5000"
 
@@ -222,6 +236,7 @@ services:
       OPENMRS_PASSWORD: ${OPENMRS_PASSWORD:?}
       HIP_URL: ${HIP_URL:?}
       PHONE_NUMBER: ${PHONE_NUMBER:?}
+      TZ: ${TZ}
     depends_on:
       - db
 
@@ -243,6 +258,7 @@ services:
       ODOO_DB_SERVER: odoodb
       ODOO_DB_USERNAME: ${ODOO_DB_USER:?}
       ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD:?}
+      TZ: ${TZ}
     volumes:
       - '${CONFIG_VOLUME:?}:/etc/bahmni_config/:ro'
     depends_on:
@@ -258,6 +274,7 @@ services:
       MYSQL_DATABASE: ${REPORTS_DB_NAME:?}
       MYSQL_USER: ${REPORTS_DB_USERNAME:?}
       MYSQL_PASSWORD: ${REPORTS_DB_PASSWORD:?}
+      TZ: ${TZ}
 
   patient-documents:
      image: 'bahmni/patient-documents:${PATIENT_DOCUMENTS_TAG:?}'
@@ -304,6 +321,7 @@ services:
       CRATER_ATOMFEED_DB_PASSWORD: ${CRATER_ATOMFEED_DB_PASSWORD}
       CRATER_ATOMFEED_DB_NAME: ${CRATER_ATOMFEED_DB_NAME}
       CRATER_URL: ${CRATER_URL}
+      TZ: ${TZ}
 
   crater-atomfeed-db:
     platform: linux/amd64
@@ -314,6 +332,7 @@ services:
       MYSQL_DATABASE: ${CRATER_ATOMFEED_DB_NAME:?}
       MYSQL_USER: ${CRATER_ATOMFEED_DB_USERNAME:?}
       MYSQL_PASSWORD: ${CRATER_ATOMFEED_DB_PASSWORD:?}
+      TZ: ${TZ}
   crater-php:
     image: bahmni/crater-php:${CRATER_PHP_IMAGE_TAG:?}
     profiles: ["crater"]
@@ -338,6 +357,7 @@ services:
       COMPANY_SLUG: ${CRATER_COMPANY_SLUG:?}
       COUNTRY_ID: ${CRATER_COUNTRY_ID:?}
       APP_DEBUG: ${CRATER_APP_DEBUG:?}
+      TZ: ${TZ}
 
   crater-nginx:
     image: bahmni/crater-nginx:${CRATER_NGINX_IMAGE_TAG:?}
@@ -362,6 +382,7 @@ services:
       MYSQL_PASSWORD: ${CRATER_DB_PASSWORD:?}
       MYSQL_DATABASE: ${CRATER_DB_DATABASE:?}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
+      TZ: ${TZ}
     ports:
       - '33006:3306'
 
@@ -386,6 +407,8 @@ services:
       #LOGGING_LEVEL_ROOT: DEBUG
       NODE_SERVER_URL: "http://rules-server:3000"
       DEBUG_OPTS: ${AVNI_DEBUG_OPTS}
+      SPRING_JACKSON_TIME_ZONE: ${TZ}
+      TZ: ${TZ}
     ports:
       - "8021:8021"
       - "8030:8030"
@@ -402,6 +425,7 @@ services:
       AVNI_DB_PASSWORD: ${AVNI_DB_PASSWORD}
       AVNI_DB_NAME: ${AVNI_DB_NAME}
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: ${TZ}
     volumes:
       - 'avni-db-data:/var/lib/postgresql/data'
   
@@ -425,6 +449,7 @@ services:
       KC_HOSTNAME_URL: "http://${HOSTNAME}:8083/keycloak"
       # KC_HTTPS_CERTIFICATE_FILE: "/etc/certs/cert.pem"
       # KC_HTTPS_CERTIFICATE_KEY_FILE: "/etc/certs/key.pem"
+      TZ: ${TZ}
     volumes:
       - "${CERTIFICATE_PATH}:/etc/certs"
     ports:
@@ -437,6 +462,7 @@ services:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME}
       POSTGRES_USER: ${KEYCLOAK_DB_USERNAME}
       POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      TZ: ${TZ}
     volumes:
       - 'keycloak-db-data:/var/lib/postgresql/data'
   
@@ -447,6 +473,7 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      TZ: ${TZ}
     volumes:
       - minio-data:/data
     ports:
@@ -472,6 +499,7 @@ services:
       BAHMNI_SCHEDULE_CRON_FULL_ERROR: ${AVNI_INTEGRATION_CRON}
       BAHMNI_AVNI_IDP_TYPE: Keycloak
       BAHMNI_INT_APP_TASKS: AvniSubject,AvniGeneralEncounter,BahmniPatient,BahmniEncounter,AvniErrorRecords,BahmniErrorRecords
+      TZ: ${TZ}
     ports:
       - "6013:6013"
       - "8031:8031"
@@ -484,6 +512,7 @@ services:
       POSTGRES_DB: ${AVNI_INTEGRATION_DB_NAME}
       POSTGRES_USER: ${AVNI_INTEGRATION_DB_USER}
       POSTGRES_PASSWORD: ${AVNI_INTEGRATION_DB_PASSWORD}
+      TZ: ${TZ}
     volumes:
       - 'avni-int-db-data:/var/lib/postgresql/data'
 
