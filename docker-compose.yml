@@ -516,6 +516,16 @@ services:
     volumes:
       - 'avni-int-db-data:/var/lib/postgresql/data'
 
+  avni_etl:
+    image: bahmnihwc/avni-etl
+    profiles: ["avni-etl"]
+    environment:
+      OPENCHS_DATABASE_USER: ${AVNI_DB_USERNAME}
+      OPENCHS_DATABASE_PASSWORD: ${AVNI_DB_PASSWORD}
+      OPENCHS_DATABASE_URL: "jdbc:postgresql://${AVNI_DB_HOST}:5432/${AVNI_DB_NAME}?currentSchema=public"
+      ETL_DEBUG_MODE: ${AVNI_ETL_DEBUG_MODE}
+      TZ: ${TZ}
+
 volumes:
   openmrs-data:
   openmrsdbdata:
