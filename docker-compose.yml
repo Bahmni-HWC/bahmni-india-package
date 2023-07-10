@@ -241,7 +241,7 @@ services:
       - db
 
   reports:
-    image: bahmni/reports:${REPORTS_IMAGE_TAG:?}
+    image: bahmnihwc/reports:${REPORTS_IMAGE_TAG:?}
     profiles: [ "reports", "emr", "bahmni-lite" ]
     environment:
       OPENMRS_DB_HOST: ${OPENMRS_DB_HOST:?}
@@ -258,6 +258,9 @@ services:
       ODOO_DB_SERVER: odoodb
       ODOO_DB_USERNAME: ${ODOO_DB_USER:?}
       ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD:?}
+      AVNI_DB_URL: "jdbc:postgresql://${AVNI_DB_HOST}:5432/${AVNI_DB_NAME}?currentSchema=public"
+      AVNI_DB_USERNAME: ${AVNI_DB_USERNAME:?}
+      AVNI_DB_PASSWORD: ${AVNI_DB_PASSWORD:?}
       TZ: ${TZ}
     volumes:
       - '${CONFIG_VOLUME:?}:/etc/bahmni_config/:ro'
