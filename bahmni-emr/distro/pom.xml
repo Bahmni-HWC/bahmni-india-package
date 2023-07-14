@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>org.bahmni.module</groupId>
-            <artifactId>hwcinventory</artifactId>
+            <artifactId>hwcinventory-omod</artifactId>
             <version>${hwcInventoryModuleVersion}</version>
         </dependency>
         
