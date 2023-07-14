@@ -53,6 +53,7 @@ services:
       OMRS_DOCKER_ENV: ${OPENMRS_DOCKER_ENV}
       OMRS_C3P0_MAX_SIZE: ${OMRS_C3P0_MAX_SIZE}
       TZ: ${TZ}
+      EAUSHADHA_ACCESS_TOKEN: ${EAUSHADHA_ACCESS_TOKEN}
     # ports:
       # - ${OMRS_DEV_DEBUG_PORT}:${OMRS_DEV_DEBUG_PORT}
     volumes:
