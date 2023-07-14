@@ -16,6 +16,7 @@
         <openhmisBackboneFormsModuleVersion>3.1.0-SNAPSHOT</openhmisBackboneFormsModuleVersion>
         <jasperreportModuleVersion>2.1.0-SNAPSHOT</jasperreportModuleVersion>
         <openhmisInventoryModuleVersion>3.1.0-SNAPSHOT</openhmisInventoryModuleVersion>
+        <hwcInventoryModuleVersion>1.0.0-SNAPSHOT</hwcInventoryModuleVersion>
         
     </properties>
 
@@ -44,6 +45,12 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>openhmis.inventory-omod</artifactId>
             <version>${openhmisInventoryModuleVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>hwcinventory-omod</artifactId>
+            <version>${hwcInventoryModuleVersion}</version>
         </dependency>
         
     </dependencies>

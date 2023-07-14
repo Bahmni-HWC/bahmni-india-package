@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
   repository_dispatch:
-    types: ["openmrs-module-openhmis.commons", "openmrs-module-openhmis.backboneforms", "openmrs-module-jasperreports", "openmrs-module-openhmis.inventory"]
+    types: ["openmrs-module-openhmis.commons", "openmrs-module-openhmis.backboneforms", "openmrs-module-jasperreports", "openmrs-module-openhmis.inventory", "openmrs-module-hwc-inventory"]
 
 jobs:
   docker-build-publish:
