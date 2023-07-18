@@ -150,6 +150,9 @@ services:
       - otp
       - rabbitmq
     environment:
+      Jwt:Authority:  ${TOKEN_AUTHORITY:?}
+      Jwt:Audience: ${TOKEN_AUDIENCE:?}
+      Jwt:Cert: ${TOKEN_CERT:?}
       Gateway:clientSecret: ${ABDM_GATEWAY_CLIENT_SECRET:?}
       Gateway:clientId: ${ABDM_GATEWAY_CLIENT_ID:?}
       Gateway:url: ${ABDM_GATEWAY_URL:?}
