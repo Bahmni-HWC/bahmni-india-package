@@ -404,10 +404,10 @@ services:
       OPENCHS_DATABASE_URL: "jdbc:postgresql://${AVNI_DB_HOST}:5432/${AVNI_DB_NAME}?currentSchema=public"
       AVNI_IDP_TYPE: keycloak
       OPENCHS_KEYCLOAK_ENABLED: true
-      OPENCHS_KEYCLOAK_SERVER: http://${HOSTNAME}:8083/keycloak
+      OPENCHS_KEYCLOAK_SERVER: ${KEYCLOAK_BASE_URL}
       OPENCHS_KEYCLOAK_CLIENT_SECRET: ${AVNI_KEYCLOAK_CLIENT_SECRET}
       OPENCHS_MINIO_ENABLED: true
-      OPENCHS_MINIO_URL: http://minio.avni.local:9000
+      OPENCHS_MINIO_URL: ${MINIO_URL:?}
       OPENCHS_BUCKET_NAME: ${AVNI_MINIO_BUCKET_NAME}
       OPENCHS_MINIO_ACCESS_KEY: ${AVNI_MINIO_ACCESS_KEY}
       OPENCHS_MINIO_SECRET_ACCESS_KEY: ${AVNI_MINIO_SECRET_ACCESS_KEY}
@@ -443,7 +443,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.2
     profiles: ["keycloak"]
-    command: "start-dev"
+    command: ${KEYCLOAK_COMMAND}
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USERNAME}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
@@ -453,7 +453,7 @@ services:
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
       KC_PROXY: "edge"
       KC_HTTP_RELATIVE_PATH: "/keycloak"
-      KC_HOSTNAME_URL: "http://${HOSTNAME}:8083/keycloak"
+      KC_HOSTNAME_URL: ${KEYCLOAK_BASE_URL}
       # KC_HTTPS_CERTIFICATE_FILE: "/etc/certs/cert.pem"
       # KC_HTTPS_CERTIFICATE_KEY_FILE: "/etc/certs/key.pem"
       TZ: ${TZ}
