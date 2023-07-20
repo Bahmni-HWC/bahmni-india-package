@@ -5,7 +5,7 @@ services:
     volumes:
     - ${CERTIFICATE_PATH}:/etc/tls
     - "bahmni-patient-images:/home/bahmni/patient_images"
-    - "bahmni-proxy/resources/avni-proxy.conf:/usr/local/apache2/conf/"
+    - "./bahmni-proxy/resources/avni-proxy.conf:/usr/local/apache2/conf/"
     environment:
       TZ: ${TZ}
 
