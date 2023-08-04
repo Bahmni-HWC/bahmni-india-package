@@ -1,4 +1,4 @@
-FROM mysql:5.6
+FROM mysql:5.7
 
 # Copy configuration_checksums & DB Backup
 COPY configuration_checksums  /configuration_checksums
