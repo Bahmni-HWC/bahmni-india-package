@@ -72,7 +72,7 @@ services:
     image: ${OPENMRS_DB_IMAGE_NAME:?}
     restart: always
     profiles: ["emr"]
-    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci --sql_mode="NO_ENGINE_SUBSTITUTION"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
       MYSQL_DATABASE: ${OPENMRS_DB_NAME:?}
