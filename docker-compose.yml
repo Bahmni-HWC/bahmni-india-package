@@ -395,7 +395,7 @@ services:
       - '33006:3306'
 
   avni:
-    image: bahmnihwc/avni-server
+    image: bahmnihwc/avni-server:${AVNI_IMAGE_TAG:?}
     profiles: ["avni"]
     environment:
       OPENCHS_MODE: "staging"
@@ -422,7 +422,7 @@ services:
       - "8030:8030"
 
   avni_db:
-    image: bahmnihwc/avni-db
+    image: bahmnihwc/avni-db:${AVNI_DB_IMAGE_TAG:?}
     restart: always
     profiles: ["avni"]
     environment:
@@ -438,11 +438,11 @@ services:
       - 'avni-db-data:/var/lib/postgresql/data'
   
   rules-server:
-    image: bahmnihwc/avni-rules-server
+    image: bahmnihwc/avni-rules-server:${AVNI_RULES_SERVER_IMAGE_TAG:?}
     profiles: ["avni"]
 
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0.2
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_IMAGE_TAG:?}
     profiles: ["keycloak"]
     command: ${KEYCLOAK_COMMAND}
     environment:
@@ -464,7 +464,7 @@ services:
       - "8083:8080"
 
   keycloak_db:
-    image: bahmnihwc/keycloak-db
+    image: bahmnihwc/keycloak-db:${KEYCLOAK_DB_IMAGE_TAG:?}
     profiles: ["keycloak"]
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME}
@@ -475,7 +475,7 @@ services:
       - 'keycloak-db-data:/var/lib/postgresql/data'
   
   minio:
-    image: quay.io/minio/minio:RELEASE.2023-04-28T18-11-17Z
+    image: quay.io/minio/minio:${MINIO_IMAGE_TAG:?}
     profiles: ["minio"]
     command: server /data --console-address ":9090"
     environment:
@@ -489,7 +489,7 @@ services:
       - "9090:9090"
 
   avni_integration:
-    image: bahmnihwc/avni-integration-service
+    image: bahmnihwc/avni-integration-service:${AVNI_INTEGRATION_IMAGE_TAG:?}
     profiles: ["avni-integration"]
     environment:
       AVNI_INT_DATASOURCE: jdbc:postgresql://${AVNI_INTEGRATION_DB_HOST}:5432/${AVNI_INTEGRATION_DB_NAME}
@@ -513,7 +513,7 @@ services:
       - "8031:8031"
   
   avni_integration_db:
-    image: bahmnihwc/avni-integration-db
+    image: bahmnihwc/avni-integration-db:${AVNI_INTEGRATION_DB_IMAGE_TAG:?}
     restart: always
     profiles: ["avni-integration"]
     environment:
@@ -525,7 +525,7 @@ services:
       - 'avni-int-db-data:/var/lib/postgresql/data'
 
   avni_etl:
-    image: bahmnihwc/avni-etl
+    image: bahmnihwc/avni-etl:${AVNI_ETL_IMAGE_TAG:?}
     profiles: ["avni-etl"]
     environment:
       OPENCHS_DATABASE_USER: ${AVNI_DB_USERNAME}
