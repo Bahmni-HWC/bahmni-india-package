@@ -251,12 +251,12 @@ services:
     environment:
       OPENMRS_DB_HOST: ${OPENMRS_DB_HOST:?}
       OPENMRS_DB_NAME: ${OPENMRS_DB_NAME:?}
-      OPENMRS_DB_USERNAME: ${MYSQL_ROOT_USERNAME:?}
-      OPENMRS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
+      OPENMRS_DB_USERNAME: ${OPENMRS_DB_USERNAME:?}
+      OPENMRS_DB_PASSWORD: ${OPENMRS_DB_PASSWORD:?}
       OPENMRS_HOST: ${OPENMRS_HOST:?}
       OPENMRS_PORT: ${OPENMRS_PORT:?}
       OPENELIS_DB_SERVER: openelisdb
-      REPORTS_DB_SERVER: reportsdb
+      REPORTS_DB_SERVER: ${REPORTS_DB_HOST:?}
       REPORTS_DB_NAME: ${REPORTS_DB_NAME:?}
       REPORTS_DB_USERNAME: ${REPORTS_DB_USERNAME:?}
       REPORTS_DB_PASSWORD: ${REPORTS_DB_PASSWORD:?}
@@ -276,7 +276,7 @@ services:
 
   reportsdb:
     image: mysql:5.6
-    profiles: ["reports"]
+    profiles: ["reports", "emr", "bahmni-lite"]
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
       MYSQL_DATABASE: ${REPORTS_DB_NAME:?}
