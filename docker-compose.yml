@@ -1,4 +1,20 @@
 version: "3.7"
+
+x-default-logging: &default
+  {}
+
+x-loki-logging: &loki
+  driver: loki
+  options:
+    loki-url: http://localhost:3100/loki/api/v1/push
+    mode: non-blocking
+    max-buffer-size: 4m
+    loki-retries: "3"
+
+x-log-config: &log-config
+  # update this value to *loki if needed to see logs in grafana dashboard.
+  <<: *default
+
 services:
   proxy:
     image: bahmnihwc/proxy:${PROXY_IMAGE_TAG:?}
@@ -6,6 +22,7 @@ services:
     - ${CERTIFICATE_PATH}:/etc/tls
     - "bahmni-patient-images:/home/bahmni/patient_images"
     - "./bahmni-proxy/resources/avni-proxy.conf:/usr/local/apache2/conf/avni-proxy.conf"
+    logging: *log-config
     environment:
       TZ: ${TZ}
 
@@ -16,12 +33,14 @@ services:
     image: '${CONFIG_IMAGE_NAME:?}:${CONFIG_IMAGE_TAG:?}'
     volumes:
       - '${CONFIG_VOLUME:?}:/usr/local/bahmni_config'
+    logging: *log-config
     environment:
       TZ: ${TZ}
 
   openmrs:
     profiles: ['emr']
     image: bahmnihwc/openmrs:${OPENMRS_IMAGE_TAG}
+    logging: *log-config
     environment:
       OMRS_DB_NAME: ${OPENMRS_DB_NAME:?}
       OMRS_DB_HOSTNAME: ${OPENMRS_DB_HOST:?}
@@ -73,6 +92,7 @@ services:
     restart: always
     profiles: ["emr"]
     command: --character-set-server=utf8 --collation-server=utf8_general_ci --sql_mode="NO_ENGINE_SUBSTITUTION"
+    logging: *log-config
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
       MYSQL_DATABASE: ${OPENMRS_DB_NAME:?}
@@ -87,6 +107,7 @@ services:
   bahmni-web:
     image: bahmnihwc/bahmni-web:${BAHMNI_WEB_IMAGE_TAG:?}
     profiles: ["emr"]
+    logging: *log-config
     volumes:
       #- "${BAHMNI_APPS_PATH:?}/ui/app/:/usr/local/apache2/htdocs/bahmni"
       #- "${BAHMNI_APPS_PATH:?}/ui/node_modules/@bower_components/:/usr/local/apache2/htdocs/bahmni/components"
@@ -95,15 +116,18 @@ services:
   bahmni-lab:
     profiles: ["lab-lite","emr","bahmni-lite"]
     image: 'bahmnihwc/bahmni-lab:${BAHMNI_LAB_IMAGE_TAG:?}'
+    logging: *log-config
   
   bahmni-inventory:
    profiles: ["inventory","emr","bahmni-lite"]
    image: 'bahmnihwc/bahmni-inventory:${BAHMNI_INVENTORY_IMAGE_TAG:?}'
+   logging: *log-config
 
   db:
     container_name: db
     image: postgres:${POSTGRES_IMAGE_TAG:?}
     profiles: ["abdm"]
+    logging: *log-config
     environment:
       - POSTGRES_USER=${HIP_DB_USER:?}
       - POSTGRES_PASSWORD=${HIP_DB_PASSWORD:?}
@@ -119,6 +143,7 @@ services:
       container_name: rabbitmq
       ports:
         - "5672:5672"
+      logging: *log-config
       environment:
         TZ: ${TZ}
   otp:
@@ -127,6 +152,7 @@ services:
       container_name: otp
       depends_on:
         - db
+      logging: *log-config
       environment:
         whitelisted:numbers: ${OTP_WHITELIST_NUMBERS}
         ConnectionStrings:DefaultConnection: Host=${OTP_DB_HOST:?};Port=${OTP_DB_PORT:?};Username=${OTP_DB_USER:?};Password=${OTP_DB_PASSWORD:?};Database=${OTP_DB_NAME:?};
@@ -136,6 +162,7 @@ services:
       image: bahmniindiadistro/hiu-db:${HIU_DB_INITIALIZER_IMAGE_TAG:?}
       profiles: ["abdm"]
       container_name: hiu-db-setup
+      logging: *log-config
       environment:
         - 'JAVA_TOOL_OPTIONS=-Djdbc.url=${HIU_DB_URL:?} -Djdbc.username=${HIU_DB_USER:?} -Djdbc.password=${HIU_DB_PASSWORD:?} -Djdbc.database=${HIU_DB_NAME:?}'
         - TZ=${TZ}
@@ -150,6 +177,7 @@ services:
       - db
       - otp
       - rabbitmq
+    logging: *log-config
     environment:
       Jwt:Authority:  ${TOKEN_AUTHORITY:?}
       Jwt:Audience: ${TOKEN_AUDIENCE:?}
@@ -176,6 +204,7 @@ services:
     image: bahmniindiadistro/hiu:${HIU_IMAGE_TAG:?}
     profiles: ["abdm"]
     container_name: hiu
+    logging: *log-config
     environment:
       HIU_ID: ${HIU_ID:?}
       HIU_NAME: ${HIU_NAME:?}
@@ -217,6 +246,7 @@ services:
     image: bahmniindiadistro/hiu-ui:${HIU_UI_IMAGE_TAG:?}
     profiles: ["abdm"]
     container_name: hiu-ui
+    logging: *log-config
     environment:
       BACKEND_BASE_URL: ${HIU_BACKEND_BASE_URL:?}
       BASE_NAME: ${HIU_UI_BASE_NAME:?}
@@ -230,6 +260,7 @@ services:
     container_name: hip-atomfeed-listener
     image: bahmniindiadistro/hip-atomfeed:${HIP_ATOMFEED_IMAGE_TAG:?}
     profiles: ["abdm"]
+    logging: *log-config
     environment:
       DATABASE_URL: ${HIP_ATOMFEED_DB_URL:?}
       DATABASE_NAME: ${HIP_ATOMFEED_DB_NAME:?}
@@ -248,6 +279,7 @@ services:
   reports:
     image: bahmnihwc/reports:${REPORTS_IMAGE_TAG:?}
     profiles: [ "reports", "emr", "bahmni-lite" ]
+    logging: *log-config
     environment:
       OPENMRS_DB_HOST: ${OPENMRS_DB_HOST:?}
       OPENMRS_DB_NAME: ${OPENMRS_DB_NAME:?}
@@ -277,6 +309,7 @@ services:
   reportsdb:
     image: mysql:5.6
     profiles: ["reports", "emr", "bahmni-lite"]
+    logging: *log-config
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
       MYSQL_DATABASE: ${REPORTS_DB_NAME:?}
@@ -292,18 +325,21 @@ services:
      volumes:
        - 'bahmni-document-images:/usr/share/nginx/html/document_images'
        - 'bahmni-lab-results:/usr/share/nginx/html/uploaded_results'
+     logging: *log-config
      environment:
        - OPENMRS_HOST=${OPENMRS_HOST:?}
 
   appointments:
     image: bahmni/appointments:${APPOINTMENTS_IMAGE_TAG:?}
     profiles: ["emr","appointments"]
+    logging: *log-config
 #    volumes:
 #      - "${APPOINTMENTS_PATH:?}/dist/:/usr/local/apache2/htdocs/appointments"
 
   implementer-interface:
     image: bahmni/implementer-interface:${IMPLEMENTER_INTERFACE_IMAGE_TAG:?}
     profiles: ["emr","implementer-interface"]
+    logging: *log-config
     #volumes:
     #  - "${IMPLEMENTER_INTERFACE_CODE_PATH:?}/dist:/usr/local/apache2/htdocs/implementer_interface"
     depends_on:
@@ -312,11 +348,13 @@ services:
   abha-verification:
     image: bahmniindiadistro/abha-verification:${ABHA_VERIFICATION_IMAGE_TAG:?}
     profiles: ["abdm"]
+    logging: *log-config
 
 
   avni:
     image: bahmnihwc/avni-server:${AVNI_IMAGE_TAG:?}
     profiles: ["avni"]
+    logging: *log-config
     environment:
       OPENCHS_MODE: "staging"
       AWS_S3_ENABLE: "false"
@@ -345,6 +383,7 @@ services:
     image: bahmnihwc/avni-db:${AVNI_DB_IMAGE_TAG:?}
     restart: always
     profiles: ["avni"]
+    logging: *log-config
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -360,11 +399,13 @@ services:
   rules-server:
     image: bahmnihwc/avni-rules-server:${AVNI_RULES_SERVER_IMAGE_TAG:?}
     profiles: ["avni"]
+    logging: *log-config
 
   keycloak:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_IMAGE_TAG:?}
     profiles: ["keycloak"]
     command: ${KEYCLOAK_COMMAND}
+    logging: *log-config
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USERNAME}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
@@ -386,6 +427,7 @@ services:
   keycloak_db:
     image: bahmnihwc/keycloak-db:${KEYCLOAK_DB_IMAGE_TAG:?}
     profiles: ["keycloak"]
+    logging: *log-config
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME}
       POSTGRES_USER: ${KEYCLOAK_DB_USERNAME}
@@ -398,6 +440,7 @@ services:
     image: quay.io/minio/minio:${MINIO_IMAGE_TAG:?}
     profiles: ["minio"]
     command: server /data --console-address ":9090"
+    logging: *log-config
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -411,6 +454,7 @@ services:
   avni_integration:
     image: bahmnihwc/avni-integration-service:${AVNI_INTEGRATION_IMAGE_TAG:?}
     profiles: ["avni-integration"]
+    logging: *log-config
     environment:
       AVNI_INT_DATASOURCE: jdbc:postgresql://${AVNI_INTEGRATION_DB_HOST}:5432/${AVNI_INTEGRATION_DB_NAME}
       AVNI_INT_DB_USER: ${AVNI_INTEGRATION_DB_USER}
@@ -436,6 +480,7 @@ services:
     image: bahmnihwc/avni-integration-db:${AVNI_INTEGRATION_DB_IMAGE_TAG:?}
     restart: always
     profiles: ["avni-integration"]
+    logging: *log-config
     environment:
       POSTGRES_DB: ${AVNI_INTEGRATION_DB_NAME}
       POSTGRES_USER: ${AVNI_INTEGRATION_DB_USER}
@@ -447,6 +492,7 @@ services:
   avni_etl:
     image: bahmnihwc/avni-etl:${AVNI_ETL_IMAGE_TAG:?}
     profiles: ["avni-etl"]
+    logging: *log-config
     environment:
       OPENCHS_DATABASE_USER: ${AVNI_DB_USERNAME}
       OPENCHS_DATABASE_PASSWORD: ${AVNI_DB_PASSWORD}
