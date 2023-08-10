@@ -39,6 +39,6 @@ psql -h ${POSTGRES_HOST} -U ${POSTGRES_ROOT_USERNAME} -d postgres -c "create use
 psql -h ${POSTGRES_HOST} -U ${POSTGRES_ROOT_USERNAME} -d postgres -c "create database ${AVNI_INTEGRATION_DB_NAME} with owner ${AVNI_INTEGRATION_DB_USERNAME}"
 
 echo "Restoring Avni Integration Database"
-gunzip -c ../backup_data/avni_integration/avni_integration_backup_07082023.sql.gz > ../backup_data/avni_integration/avni_integration_backup_07082023.sql
-psql -h ${POSTGRES_HOST} -U ${POSTGRES_ROOT_USERNAME} -d ${AVNI_INTEGRATION_DB_NAME} -f ../backup_data/avni_integration/avni_integration_backup_07082023.sql
+gunzip -c ../backup_data/avni_integration/avni_integration_backup_10082023.sql.gz > ../backup_data/avni_integration/avni_integration_backup_10082023.sql
+psql -h ${POSTGRES_HOST} -U ${POSTGRES_ROOT_USERNAME} -d ${AVNI_INTEGRATION_DB_NAME} -f ../backup_data/avni_integration/avni_integration_backup_10082023.sql
 
