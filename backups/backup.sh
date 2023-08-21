@@ -35,8 +35,9 @@ mysqldump -h $OPENMRS_DB_HOST -u $OPENMRS_DB_USERNAME --password=$OPENMRS_DB_PAS
 echo "Taking backup for Reports"
 mysqldump -h $REPORTS_DB_HOST -u $REPORTS_DB_USERNAME --password=$REPORTS_DB_PASSWORD --routines bahmni_reports > "$backup_subfolder_reports_full_path" --no-tablespaces
 
-echo "Taking backup for Patient-Documents"
+echo "Taking backup for Patient-Documents and Uploaded lab results"
 docker cp -a $patient_documents_container:/usr/share/nginx/html/document_images "$backup_subfolder_full_path"
+docker cp -a $patient_documents_container:/usr/share/nginx/html/uploaded_results "$backup_subfolder_full_path"
 
 echo "Taking backup for Patient-Images"
 docker cp -a $patient_images_container:/home/bahmni/patient_images "$backup_subfolder_full_path"
