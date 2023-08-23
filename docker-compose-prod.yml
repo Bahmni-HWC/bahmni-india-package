@@ -18,6 +18,7 @@ x-log-config: &log-config
 services:
   proxy:
     image: bahmnihwc/proxy:${PROXY_IMAGE_TAG:?}
+    container_name: proxy
     volumes:
     - ${CERTIFICATE_PATH}:/etc/tls
     - "bahmni-patient-images:/home/bahmni/patient_images"
@@ -259,6 +260,7 @@ services:
 
   patient-documents:
      image: 'bahmni/patient-documents:${PATIENT_DOCUMENTS_TAG:?}'
+     container_name: patient-documents
      profiles: ["emr"]
      volumes:
        - 'bahmni-document-images:/usr/share/nginx/html/document_images'
@@ -347,6 +349,7 @@ services:
   
   minio:
     image: quay.io/minio/minio:${MINIO_IMAGE_TAG:?}
+    container_name: minio
     profiles: ["minio"]
     command: server /data --console-address ":9090"
     logging: *log-config
