@@ -326,7 +326,7 @@ services:
     logging: *log-config
 
   keycloak:
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_IMAGE_TAG:?}
+    image: keycloak/keycloak:${KEYCLOAK_IMAGE_TAG:?}
     profiles: ["keycloak"]
     command: ${KEYCLOAK_COMMAND}
     logging: *log-config
@@ -350,7 +350,7 @@ services:
 
   
   minio:
-    image: quay.io/minio/minio:${MINIO_IMAGE_TAG:?}
+    image: minio/minio:${MINIO_IMAGE_TAG:?}
     container_name: minio
     profiles: ["minio"]
     command: server /data --console-address ":9090"

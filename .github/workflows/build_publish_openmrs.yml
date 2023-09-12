@@ -49,3 +49,4 @@ jobs:
           file: bahmni-emr/package/docker/Dockerfile
           push: true
           tags: bahmnihwc/openmrs:${{env.ARTIFACT_VERSION}},bahmnihwc/openmrs:latest
+          no-cache: true
