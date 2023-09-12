@@ -26,6 +26,8 @@ services:
     logging: *log-config
     environment:
       TZ: ${TZ}
+      HOST_VALIDATION: ${HOST_VALIDATION}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
 
     ports:
       - "80:80"
