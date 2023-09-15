@@ -380,6 +380,8 @@ services:
     ports:
       - "8021:8021"
       - "8030:8030"
+    extra_hosts:
+      - "minio.avni.local: ${HOSTNAME}"
 
   avni_db:
     image: bahmnihwc/avni-db:${AVNI_DB_IMAGE_TAG:?}
