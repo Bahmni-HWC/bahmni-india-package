@@ -1,7 +1,9 @@
 name: Deploy to Bahmni HWC Dev Environment
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+    
 jobs:
   deploy:
     name: Deploy to Remote Instance
