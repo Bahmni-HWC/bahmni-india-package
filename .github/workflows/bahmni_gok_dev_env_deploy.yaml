@@ -32,6 +32,7 @@ jobs:
                   "docker compose pull",
                   "docker compose up -d",
                   "docker image prune -f"
+                  "docker compose restart proxy"
                 ],
                 "workingDirectory": [
                   "/home/ubuntu/bahmni-india-package"
