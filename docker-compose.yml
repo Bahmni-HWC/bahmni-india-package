@@ -504,6 +504,19 @@ services:
       ETL_DEBUG_MODE: ${AVNI_ETL_DEBUG_MODE}
       TZ: ${TZ}
 
+  esanjeevani_service:
+    image: bahmnihwc/esanjeevani-service:${ESANJEEVANI_SERVICE_IMAGE_TAG:?}
+    profiles: ["esanjeevani"]
+    logging: *log-config
+    environment:
+      TZ: ${TZ}
+      ESANJEEVANI_API_BASE_URL: ${ESANJEEVANI_API_BASE_URL}
+      ESANJEEVANI_SSOLOGIN_BASE_URL: ${ESANJEEVANI_SSOLOGIN_BASE_URL}
+      ESANJEEVANI_SOURCE: ${ESANJEEVANI_SOURCE}
+      ESANJEEVANI_ENABLE_DEBUG_LOG: ${ESANJEEVANI_ENABLE_DEBUG_LOG}
+      TOKEN_AUDIENCE: ${TOKEN_AUDIENCE}
+      TOKEN_CERT: ${TOKEN_CERT}
+
 volumes:
   openmrs-data:
   openmrsdbdata:
