@@ -5,7 +5,9 @@ COPY bahmni-proxy/resources/abdm-service-rewrite.conf /usr/local/apache2/conf/
 COPY bahmni-proxy/resources/avni-proxy.conf /usr/local/apache2/conf/
 COPY bahmni-proxy/resources/host-validation.conf /usr/local/apache2/conf/
 COPY bahmni-proxy/resources/security-header-proxy.conf /usr/local/apache2/conf/
+COPY bahmni-proxy/resources/esanjeevani-proxy.conf /usr/local/apache2/conf/
 RUN sed -i "/^<VirtualHost \*:443>/r /usr/local/apache2/conf/abdm-service-rewrite.conf" /usr/local/apache2/conf/bahmni-proxy.conf
 RUN echo "Include conf/bahmni-abdm-proxy.conf" >> /usr/local/apache2/conf/httpd.conf
 RUN echo "Include conf/avni-proxy.conf" >> /usr/local/apache2/conf/bahmni-proxy.conf
 RUN echo "Include conf/security-header-proxy.conf" >> /usr/local/apache2/conf/bahmni-proxy.conf
+RUN echo "Include conf/esanjeevani-proxy.conf" >> /usr/local/apache2/conf/bahmni-proxy.conf
