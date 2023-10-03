@@ -1,7 +1,9 @@
 name: Deploy to Bahmni HWC Dev Environment
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+    
 jobs:
   deploy:
     name: Deploy to Remote Instance
@@ -31,7 +33,8 @@ jobs:
                   "git pull -r",
                   "docker compose pull",
                   "docker compose up -d",
-                  "docker image prune -f"
+                  "docker image prune -f",
+                  "docker compose restart proxy"
                 ],
                 "workingDirectory": [
                   "/home/ubuntu/bahmni-india-package"
