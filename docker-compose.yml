@@ -516,6 +516,8 @@ services:
       ESANJEEVANI_ENABLE_DEBUG_LOG: ${ESANJEEVANI_ENABLE_DEBUG_LOG}
       TOKEN_AUDIENCE: ${TOKEN_AUDIENCE}
       TOKEN_CERT: ${TOKEN_CERT}
+    volumes:
+      - 'esanjeevani-audit:/opt/esanjeevani/audit'
 
 volumes:
   openmrs-data:
@@ -533,3 +535,4 @@ volumes:
   ssl-certs:
   bahmni-clinical-forms:
   bahmni-lab-results:
+  esanjeevani-audit:
