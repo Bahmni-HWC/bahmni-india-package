@@ -187,6 +187,7 @@ services:
       Gateway:clientSecret: ${ABDM_GATEWAY_CLIENT_SECRET:?}
       Gateway:clientId: ${ABDM_GATEWAY_CLIENT_ID:?}
       Gateway:url: ${ABDM_GATEWAY_URL:?}
+      Gateway:benefitName: ${BENEFIT_NAME:?}
       OpenMrs:url: ${OPENMRS_URL:?}
       OpenMrs:password: ${OPENMRS_PASSWORD:?}
       OpenMrs:phoneNumber: ${PHONE_NUMBER:?}
@@ -516,6 +517,8 @@ services:
       ESANJEEVANI_ENABLE_DEBUG_LOG: ${ESANJEEVANI_ENABLE_DEBUG_LOG}
       TOKEN_AUDIENCE: ${TOKEN_AUDIENCE}
       TOKEN_CERT: ${TOKEN_CERT}
+    volumes:
+      - 'esanjeevani-audit:/opt/esanjeevani/audit'
 
 volumes:
   openmrs-data:
@@ -533,3 +536,4 @@ volumes:
   ssl-certs:
   bahmni-clinical-forms:
   bahmni-lab-results:
+  esanjeevani-audit:
