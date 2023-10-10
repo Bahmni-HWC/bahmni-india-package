@@ -187,6 +187,7 @@ services:
       Gateway:clientSecret: ${ABDM_GATEWAY_CLIENT_SECRET:?}
       Gateway:clientId: ${ABDM_GATEWAY_CLIENT_ID:?}
       Gateway:url: ${ABDM_GATEWAY_URL:?}
+      Gateway:benefitName: ${BENEFIT_NAME:?}
       OpenMrs:url: ${OPENMRS_URL:?}
       OpenMrs:password: ${OPENMRS_PASSWORD:?}
       OpenMrs:phoneNumber: ${PHONE_NUMBER:?}
