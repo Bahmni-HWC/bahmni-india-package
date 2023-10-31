@@ -557,6 +557,11 @@ services:
       MART_DB_NAME: ${MART_DB_NAME:?}
       MART_DB_USERNAME: ${MART_DB_USERNAME:?}
       MART_DB_PASSWORD: ${MART_DB_PASSWORD:?}
+      AVNI_DB_HOST: ${AVNI_DB_HOST:?}
+      AVNI_DB_NAME: ${AVNI_DB_NAME}
+      AVNI_DB_USERNAME: ${AVNI_DB_USERNAME}
+      AVNI_DB_PASSWORD: ${AVNI_DB_PASSWORD}
+
     depends_on:
      - metabasedb
 
