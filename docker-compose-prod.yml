@@ -414,7 +414,7 @@ services:
       - 'esanjeevani-audit:/opt/esanjeevani/audit'
 
   metabase:
-    image: bahmni/bahmni-metabase:${METABASE_IMAGE_TAG:?}
+    image: bahmnihwc/bahmni-metabase:${METABASE_IMAGE_TAG:?}
     restart: on-failure:[3]
     profiles: ["metabase", "bahmni-mart"]
     environment:
