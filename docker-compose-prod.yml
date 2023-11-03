@@ -41,6 +41,7 @@ services:
       TZ: ${TZ}
 
   openmrs:
+    container_name: openmrs
     profiles: ['emr']
     image: bahmnihwc/openmrs:${OPENMRS_IMAGE_TAG}
     logging: *log-config

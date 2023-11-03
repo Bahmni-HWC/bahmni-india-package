@@ -15,6 +15,7 @@ mkdir -p "$backup_subfolder_full_path/openmrs"
 mkdir -p "$backup_subfolder_full_path/reports"
 mkdir -p "$backup_subfolder_full_path/avni"
 mkdir -p "$backup_subfolder_full_path/keycloak"
+mkdir -p "$backup_subfolder_full_path/metabase"
 
 backup_subfolder_openmrs_full_path=$backup_subfolder_full_path/openmrs/openmrsdb_backup.sql
 backup_subfolder_reports_full_path=$backup_subfolder_full_path/reports/reportsdb_backup.sql
@@ -28,6 +29,7 @@ source ../.env.prod
 patient_documents_container="patient-documents"
 patient_images_container="proxy"
 minio_container="minio"
+openmrs_container="openmrs"
 
 echo "Taking backup for OpenMRS"
 mysqldump -h $OPENMRS_DB_HOST -u $OPENMRS_DB_USERNAME --password=$OPENMRS_DB_PASSWORD --routines openmrs > "$backup_subfolder_openmrs_full_path" --no-tablespaces
@@ -42,6 +44,9 @@ docker cp -a $patient_documents_container:/usr/share/nginx/html/uploaded_results
 echo "Taking backup for Patient-Images"
 docker cp -a $patient_images_container:/home/bahmni/patient_images "$backup_subfolder_full_path"
 
+echo "Taking backup for Clinical-Forms"
+docker cp -a $openmrs_container:/home/bahmni/clinical_forms "$backup_subfolder_full_path"
+
 echo "Taking backup for Avni"
 pg_dump -h $AVNI_DB_HOST -U $AVNI_DB_USERNAME -d $AVNI_DB_NAME -F c -b -v -f "$backup_subfolder_avni_full_path"
 
@@ -50,6 +55,9 @@ pg_dump -h $AVNI_INTEGRATION_DB_HOST -U $AVNI_INTEGRATION_DB_USER -d $AVNI_INTEG
 
 echo "Taking backup for Keycloak"
 pg_dump -h $KEYCLOAK_DB_HOST -U $KEYCLOAK_DB_USERNAME -d $KEYCLOAK_DB_NAME -F c -b -v -f "$backup_subfolder_keycloak_full_path"
+
+echo "Taking backup for Metabase"
+pg_dump -h $METABASE_DB_HOST -U $METABASE_DB_USERNAME -d $METABASE_DB_NAME -F c -b -v -f "$backup_subfolder_metabase_full_path"
 
 echo "Taking backup for Minio"
 docker cp -a $minio_container:/data "$backup_subfolder_minio_full_path"
