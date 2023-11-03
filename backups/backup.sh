@@ -49,16 +49,16 @@ echo "Taking backup for Clinical-Forms"
 docker cp -a $openmrs_container:/home/bahmni/clinical_forms "$backup_subfolder_full_path"
 
 echo "Taking backup for Avni"
-pg_dump -h $AVNI_DB_HOST -U $AVNI_DB_USERNAME -d $AVNI_DB_NAME -F c -b -v -f "$backup_subfolder_avni_full_path"
+pg_dump -h $AVNI_DB_HOST -U $AVNI_DB_USERNAME -d $AVNI_DB_NAME -F p -b -v -f "$backup_subfolder_avni_full_path"
 
 echo "Taking backup for Avni Integration"
-pg_dump -h $AVNI_INTEGRATION_DB_HOST -U $AVNI_INTEGRATION_DB_USER -d $AVNI_INTEGRATION_DB_NAME -F c -b -v -f "$backup_subfolder_avni_integration_full_path"
+pg_dump -h $AVNI_INTEGRATION_DB_HOST -U $AVNI_INTEGRATION_DB_USER -d $AVNI_INTEGRATION_DB_NAME -F p -b -v -f "$backup_subfolder_avni_integration_full_path"
 
 echo "Taking backup for Keycloak"
-pg_dump -h $KEYCLOAK_DB_HOST -U $KEYCLOAK_DB_USERNAME -d $KEYCLOAK_DB_NAME -F c -b -v -f "$backup_subfolder_keycloak_full_path"
+pg_dump -h $KEYCLOAK_DB_HOST -U $KEYCLOAK_DB_USERNAME -d $KEYCLOAK_DB_NAME -F p -b -v -f "$backup_subfolder_keycloak_full_path"
 
 echo "Taking backup for Metabase"
-pg_dump -h $METABASE_DB_HOST -U $METABASE_DB_USER -d $METABASE_DB_NAME -F c -b -v -f "$backup_subfolder_metabase_full_path"
+pg_dump -h $METABASE_DB_HOST -U $METABASE_DB_USER -d $METABASE_DB_NAME -F p -b -v -f "$backup_subfolder_metabase_full_path"
 
 echo "Taking backup for Minio"
 docker cp -a $minio_container:/data "$backup_subfolder_minio_full_path"
