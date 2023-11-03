@@ -23,6 +23,7 @@ backup_subfolder_avni_full_path=$backup_subfolder_full_path/avni/avni_db_backup.
 backup_subfolder_avni_integration_full_path=$backup_subfolder_full_path/avni/avni_integration_db_backup.sql
 backup_subfolder_keycloak_full_path=$backup_subfolder_full_path/keycloak/keycloak_db_backup.sql
 backup_subfolder_minio_full_path=$backup_subfolder_full_path/avni/minio
+backup_subfolder_metabase_full_path=$backup_subfolder_full_path/metabase/metabase_db_backup.sql
 
 source ../.env.prod
 
