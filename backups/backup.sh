@@ -57,7 +57,7 @@ echo "Taking backup for Keycloak"
 pg_dump -h $KEYCLOAK_DB_HOST -U $KEYCLOAK_DB_USERNAME -d $KEYCLOAK_DB_NAME -F c -b -v -f "$backup_subfolder_keycloak_full_path"
 
 echo "Taking backup for Metabase"
-pg_dump -h $METABASE_DB_HOST -U $METABASE_DB_USERNAME -d $METABASE_DB_NAME -F c -b -v -f "$backup_subfolder_metabase_full_path"
+pg_dump -h $METABASE_DB_HOST -U $METABASE_DB_USER -d $METABASE_DB_NAME -F c -b -v -f "$backup_subfolder_metabase_full_path"
 
 echo "Taking backup for Minio"
 docker cp -a $minio_container:/data "$backup_subfolder_minio_full_path"
