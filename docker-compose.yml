@@ -353,9 +353,8 @@ services:
     profiles: ["abdm"]
     logging: *log-config
 
-
   avni:
-    image: bahmnihwc/avni-server:${AVNI_IMAGE_TAG:?}
+    image: avniproject/avni-server:${AVNI_IMAGE_TAG:?}
     profiles: ["avni"]
     logging: *log-config
     environment:
@@ -385,6 +384,13 @@ services:
       - "8030:8030"
     extra_hosts:
       - "minio.avni.local: ${HOSTNAME}"
+    volumes:
+      - 'avni-webapp:/opt/openchs/static/'
+      
+  avni_webapp:
+    image: avniproject/avni-webapp:${AVNI_WEBAPP_IMAGE_TAG:?}
+    volumes:
+      - 'avni-webapp:/opt/openchs/static/'
 
   avni_db:
     image: bahmnihwc/avni-db:${AVNI_DB_IMAGE_TAG:?}
@@ -404,7 +410,7 @@ services:
       - 'avni-db-data:/var/lib/postgresql/data'
   
   rules-server:
-    image: bahmnihwc/avni-rules-server:${AVNI_RULES_SERVER_IMAGE_TAG:?}
+    image: avniproject/rules-server:${AVNI_RULES_SERVER_IMAGE_TAG}
     profiles: ["avni"]
     logging: *log-config
 
@@ -616,3 +622,4 @@ volumes:
   esanjeevani-audit:
   mart-data:
   metabase-data:
+  avni-webapp:
