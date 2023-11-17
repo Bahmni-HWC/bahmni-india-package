@@ -428,11 +428,12 @@ services:
       TZ: ${TZ}
     volumes:
       - "${CERTIFICATE_PATH}:/etc/certs"
+      - './keycloak-data/:/opt/keycloak/data/import' 
     ports:
       - "8083:8080"
 
   keycloak_db:
-    image: bahmnihwc/keycloak-db:${KEYCLOAK_DB_IMAGE_TAG:?}
+    image: postgres:${POSTGRES_IMAGE_TAG:?}
     profiles: ["keycloak"]
     logging: *log-config
     environment:
