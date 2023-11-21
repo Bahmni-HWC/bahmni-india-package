@@ -145,6 +145,13 @@ Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which o
 # Keycloak Setup with Custom Realm Data
 We have organized a folder to store realm data in JSON format for use with the Keycloak service. This JSON file is employed during the initialization of the Keycloak service to automatically generate the specified realm along with its associated users. Manual addition of users to the JSON file is a prerequisite.
 
+## Taking Backup json from existing instance
+1. Go inside keycloak container by running `docker compose exec keycloak /bin/sh`
+2. Navigate to `opt/keycloak/bin` directory
+3. Run ` ./kc.sh export --file <out-file-name> --realm <realm-name>`, it will export the realm data in json format.
+   eg: ./kc.sh export --file realm-export.json --realm On-premise
+4. Copy that output json file to outside the container by running `docker cp <container_id>:/opt/keycloak/bin/realm-export.json .`
+
 # Default AVNI Keycloak Client Secret
 The Keycloak service uses a default AVNI Keycloak Client Secret for initial setup.
 To enhance security, follow these steps:
