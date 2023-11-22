@@ -141,3 +141,24 @@ Both Avni Server and Avni Integration server has got DEBUG_OPTS variable which o
 1. Avni Bahmni Integration Metadata: https://avni.readme.io/docs/avni-bahmni-integration-specific
 2. Avni Component Architecture: https://avni.readme.io/docs/component-architecture
 3. Avni Docker Architecture: <img src="./Avni Docker Architecture.png"/>
+
+# Keycloak Setup with Custom Realm Data
+We have organized a folder to store realm data in JSON format for use with the Keycloak service. This JSON file is employed during the initialization of the Keycloak service to automatically generate the specified realm along with its associated users. Manual addition of users to the JSON file is a prerequisite.
+
+## Taking Backup json from existing instance
+1. Go inside keycloak container by running `docker compose exec keycloak /bin/sh`
+2. Navigate to `opt/keycloak/bin` directory
+3. Run ` ./kc.sh export --file <out-file-name> --realm <realm-name>`, it will export the realm data in json format.
+   eg: ./kc.sh export --file realm-export.json --realm On-premise
+4. Copy that output json file to outside the container by running `docker cp <container_id>:/opt/keycloak/bin/realm-export.json .`
+
+# Default AVNI Keycloak Client Secret
+The Keycloak service uses a default AVNI Keycloak Client Secret for initial setup.
+To enhance security, follow these steps:
+
+1. Access the Keycloak Admin Console.
+2. Navigate to Clients > Client Details > admin-api > Client Secret.
+3. Click "Regenerate" for a new secret.
+4. Update the ENV file with the new secret.
+
+This ensures your Keycloak instance is configured with a custom client secret, bolstering the security of your setup.
